@@ -55,6 +55,26 @@ def show_result(captcha):
 
 ### Test Functions ###
 
+def test_captcha_creation_invalid_code():
+    OUT_DIR = BUILD_DIR / "invalid"
+    generator = CaptchaGenerator()
+    # Invalid Generation 1: Negative integer for circle nums captcha
+    captcha = generator.generate(-123, scene=CaptchaScene.CIRCLE_NUMS,
+                                 out_dir=OUT_DIR)
+    show_result(captcha)
+    assert captcha.error
+    # Invalid Generation 2: Negative number for circle nums captcha
+    captcha = generator.generate("-123", scene=CaptchaScene.CIRCLE_NUMS,
+                                 out_dir=OUT_DIR)
+    show_result(captcha)
+    assert captcha.error
+    # Invalid Generation 3: Not number for circle nums captcha
+    captcha = generator.generate("1AB2", scene=CaptchaScene.CIRCLE_NUMS,
+                                 out_dir=OUT_DIR)
+    show_result(captcha)
+    assert captcha.error
+
+
 def test_captcha_creation_default():
     OUT_DIR = BUILD_DIR / "default"
     generator = CaptchaGenerator()
@@ -68,16 +88,29 @@ def test_captcha_creation_default():
     assert not captcha.error
 
 
+def test_captcha_creation_short_long():
+    OUT_DIR = BUILD_DIR / "short_long"
+    generator = CaptchaGenerator()
+    # Cairo Renderer Generation
+    captcha = generator.generate("5", out_dir=OUT_DIR)
+    show_result(captcha)
+    assert not captcha.error
+    # OpenGL Renderer Generation
+    captcha = generator.generate("0123456789", out_dir=OUT_DIR)
+    show_result(captcha)
+    assert not captcha.error
+
+
 def test_captcha_creation_render():
     OUT_DIR = BUILD_DIR / "render"
     generator = CaptchaGenerator()
     # Cairo Renderer Generation
-    captcha = generator.generate(1234, scene=CaptchaScene.CIRCLE_NUMS,
+    captcha = generator.generate("1234", scene=CaptchaScene.CIRCLE_NUMS,
                                  renderer="cairo", out_dir=OUT_DIR)
     show_result(captcha)
     assert not captcha.error
     # OpenGL Renderer Generation
-    captcha = generator.generate(5678, scene=CaptchaScene.CIRCLE_NUMS,
+    captcha = generator.generate("5678", scene=CaptchaScene.CIRCLE_NUMS,
                                  renderer="opengl", out_dir=OUT_DIR)
     show_result(captcha)
     assert not captcha.error
@@ -87,17 +120,17 @@ def test_captcha_creation_builtin_scenes():
     OUT_DIR = BUILD_DIR / "builtin_scenes"
     generator = CaptchaGenerator()
     # Captcha Generation - Circle Nums
-    captcha = generator.generate(1234, scene=CaptchaScene.CIRCLE_NUMS,
+    captcha = generator.generate("0123", scene=CaptchaScene.CIRCLE_NUMS,
                                  out_dir=OUT_DIR)
     show_result(captcha)
     assert not captcha.error
     # Captcha Generation - Matrix Nums
-    captcha = generator.generate(5678, scene=CaptchaScene.MATRIX_NUMS,
+    captcha = generator.generate("5678", scene=CaptchaScene.MATRIX_NUMS,
                                  out_dir=OUT_DIR)
     show_result(captcha)
     assert not captcha.error
     # Captcha Generation - Piramid Nums
-    captcha = generator.generate(9012, scene=CaptchaScene.PIRAMID_NUMS,
+    captcha = generator.generate("9012", scene=CaptchaScene.PIRAMID_NUMS,
                                  out_dir=OUT_DIR)
     show_result(captcha)
     assert not captcha.error
@@ -114,17 +147,17 @@ def test_captcha_creation_theme_dark():
     generator = CaptchaGenerator()
     properties = theme_dark
     # Captcha Generation - Circle Nums
-    captcha = generator.generate(1234, scene=CaptchaScene.CIRCLE_NUMS,
+    captcha = generator.generate("1234", scene=CaptchaScene.CIRCLE_NUMS,
                                  properties=properties, out_dir=OUT_DIR)
     show_result(captcha)
     assert not captcha.error
     # Captcha Generation - Matrix Nums
-    captcha = generator.generate(5678, scene=CaptchaScene.MATRIX_NUMS,
+    captcha = generator.generate("5678", scene=CaptchaScene.MATRIX_NUMS,
                                  properties=properties, out_dir=OUT_DIR)
     show_result(captcha)
     assert not captcha.error
     # Captcha Generation - Piramid Nums
-    captcha = generator.generate(9012, scene=CaptchaScene.PIRAMID_NUMS,
+    captcha = generator.generate("9012", scene=CaptchaScene.PIRAMID_NUMS,
                                  properties=properties, out_dir=OUT_DIR)
     show_result(captcha)
     assert not captcha.error
@@ -141,17 +174,17 @@ def test_captcha_creation_theme_light():
     generator = CaptchaGenerator()
     properties = theme_light
     # Captcha Generation - Circle Nums
-    captcha = generator.generate(1234, scene=CaptchaScene.CIRCLE_NUMS,
+    captcha = generator.generate("1234", scene=CaptchaScene.CIRCLE_NUMS,
                                  properties=properties, out_dir=OUT_DIR)
     show_result(captcha)
     assert not captcha.error
     # Captcha Generation - Matrix Nums
-    captcha = generator.generate(5678, scene=CaptchaScene.MATRIX_NUMS,
+    captcha = generator.generate("5678", scene=CaptchaScene.MATRIX_NUMS,
                                  properties=properties, out_dir=OUT_DIR)
     show_result(captcha)
     assert not captcha.error
     # Captcha Generation - Piramid Nums
-    captcha = generator.generate(9012, scene=CaptchaScene.PIRAMID_NUMS,
+    captcha = generator.generate("9012", scene=CaptchaScene.PIRAMID_NUMS,
                                  properties=properties, out_dir=OUT_DIR)
     show_result(captcha)
     assert not captcha.error
