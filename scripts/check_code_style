@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Description: Run Ruff to check code style.
+
+# Actual script directory path
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+
+TARGET_DIR="${DIR}/../src/manim_captcha"
+
+# Show Header
+echo "-------------------------------------------------"
+echo " Checking Code Style "
+echo "-------------------------------------------------"
+echo ""
+
+# Activate Virtual Environment
+echo "Accesing Virtual Environment..."
+source ${DIR}/../.venv/bin/activate || exit 1
+echo ""
+
+# Run Code Style Check
+ruff check "$TARGET_DIR"
+ruff clean
+echo ""
+
+# Exit Virtual Environment
+deactivate
+echo "Code Style check completed"
+echo ""
+
+exit 0
