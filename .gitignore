@@ -1,0 +1,18 @@
+# Editors
+.vscode/
+
+# Python
+*.egg-info/
+.eggs/
+.idea/
+__pycache__/
+.venv/
+Pipfile*
+*.pkl
+*.pyc
+
+# Project
+build/
+dist/
+*.log
+*.ignore
