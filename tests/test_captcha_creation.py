@@ -24,6 +24,7 @@ import pytest
 
 from pathlib import Path
 from manim_captcha.generator import CaptchaGenerator
+from manim_captcha.scenes import CaptchaScene
 from manim_captcha.colors import CaptchaColor, CaptchaColorCustom
 # from custom_captcha.test import TheScene as TestScene
 
@@ -33,21 +34,7 @@ from manim_captcha.colors import CaptchaColor, CaptchaColorCustom
 ###############################################################################
 
 BASE_DIR = Path(__file__).resolve().parent
-OUT_DIR = BASE_DIR / "../build/captchas"
-
-theme_dark = {
-    "bg_color": CaptchaColorCustom("#0E1621"),
-    "draw_color": CaptchaColor.WHITE,
-    "selector_color": CaptchaColor.BLUE_D,
-    "container_color": CaptchaColorCustom("#17212B")
-}
-
-theme_light = {
-    "bg_color": CaptchaColorCustom("#6FA788"),
-    "draw_color": CaptchaColor.BLACK,
-    "selector_color": CaptchaColor.RED_D,
-    "container_color": CaptchaColor.WHITE,
-}
+BUILD_DIR = BASE_DIR / "../build/captchas"
 
 ###############################################################################
 
@@ -66,18 +53,97 @@ def show_result(captcha):
 
 ###############################################################################
 
-### Test Function ###
+### Test Functions ###
 
-def test_captcha_creation():
+def test_captcha_creation_default():
+    OUT_DIR = BUILD_DIR / "default"
     generator = CaptchaGenerator()
-    # Default Generation
-    captcha = generator.generate(1234, out_dir=OUT_DIR)
+    # Default Generation 1
+    captcha = generator.generate(out_dir=OUT_DIR)
+    show_result(captcha)
+    # Default Generation 2
+    captcha = generator.generate(out_dir=OUT_DIR)
+    show_result(captcha)
+
+
+def test_captcha_creation_render():
+    OUT_DIR = BUILD_DIR / "render"
+    generator = CaptchaGenerator()
+    # Cairo Renderer Generation
+    captcha = generator.generate(1234, scene=CaptchaScene.CIRCLE_NUMS,
+                                 renderer="cairo", out_dir=OUT_DIR)
     show_result(captcha)
     # OpenGL Renderer Generation
-    captcha = generator.generate(1235, renderer="opengl", out_dir=OUT_DIR)
+    captcha = generator.generate(5678, scene=CaptchaScene.CIRCLE_NUMS,
+                                 renderer="opengl", out_dir=OUT_DIR)
     show_result(captcha)
-    # Custom Properties
-    captcha = generator.generate(1236, properties=theme_dark, out_dir=OUT_DIR)
+    assert True
+
+
+def test_captcha_creation_builtin_scenes():
+    OUT_DIR = BUILD_DIR / "builtin_scenes"
+    generator = CaptchaGenerator()
+    # Captcha Generation - Circle Nums
+    captcha = generator.generate(1234, scene=CaptchaScene.CIRCLE_NUMS,
+                                 out_dir=OUT_DIR)
+    show_result(captcha)
+    # Captcha Generation - Matrix Nums
+    captcha = generator.generate(5678, scene=CaptchaScene.MATRIX_NUMS,
+                                 out_dir=OUT_DIR)
+    show_result(captcha)
+    # Captcha Generation - Piramid Nums
+    captcha = generator.generate(9012, scene=CaptchaScene.PIRAMID_NUMS,
+                                 out_dir=OUT_DIR)
+    show_result(captcha)
+    assert True
+
+
+def test_captcha_creation_theme_dark():
+    theme_dark = {
+        "bg_color": CaptchaColorCustom("#0E1621"),
+        "draw_color": CaptchaColor.WHITE,
+        "selector_color": CaptchaColor.BLUE_D,
+        "container_color": CaptchaColorCustom("#17212B")
+    }
+    OUT_DIR = BUILD_DIR / "theme_dark"
+    generator = CaptchaGenerator()
+    properties = theme_dark
+    # Captcha Generation - Circle Nums
+    captcha = generator.generate(1234, scene=CaptchaScene.CIRCLE_NUMS,
+                                 properties=properties, out_dir=OUT_DIR)
+    show_result(captcha)
+    # Captcha Generation - Matrix Nums
+    captcha = generator.generate(5678, scene=CaptchaScene.MATRIX_NUMS,
+                                 properties=properties, out_dir=OUT_DIR)
+    show_result(captcha)
+    # Captcha Generation - Piramid Nums
+    captcha = generator.generate(9012, scene=CaptchaScene.PIRAMID_NUMS,
+                                 properties=properties, out_dir=OUT_DIR)
+    show_result(captcha)
+    assert True
+
+
+def test_captcha_creation_theme_light():
+    theme_light = {
+        "bg_color": CaptchaColorCustom("#6FA788"),
+        "draw_color": CaptchaColor.BLACK,
+        "selector_color": CaptchaColor.RED_D,
+        "container_color": CaptchaColor.WHITE,
+    }
+    OUT_DIR = BUILD_DIR / "theme_light"
+    generator = CaptchaGenerator()
+    properties = theme_light
+    # Captcha Generation - Circle Nums
+    captcha = generator.generate(1234, scene=CaptchaScene.CIRCLE_NUMS,
+                                 properties=properties, out_dir=OUT_DIR)
+    show_result(captcha)
+    # Captcha Generation - Matrix Nums
+    captcha = generator.generate(5678, scene=CaptchaScene.MATRIX_NUMS,
+                                 properties=properties, out_dir=OUT_DIR)
+    show_result(captcha)
+    # Captcha Generation - Piramid Nums
+    captcha = generator.generate(9012, scene=CaptchaScene.PIRAMID_NUMS,
+                                 properties=properties, out_dir=OUT_DIR)
     show_result(captcha)
     assert True
 
