@@ -40,6 +40,9 @@ echo ""
 pip list
 echo ""
 
+# Install package in edit mode (for tests)
+pip install -e .
+
 # Exit Virtual Environment
 deactivate
 echo "Project setup completed"
