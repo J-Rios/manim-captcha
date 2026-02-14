@@ -74,10 +74,10 @@ class CaptchaGenerator:
         """Captcha information."""
 
         def __init__(self):
-            self.code = ""
-            self.file = None
-            self.error = False
-            self.error_info = ""
+            self.code: str = ""
+            self.file: Path = None
+            self.error: bool = False
+            self.error_info: str = ""
 
     ###########################################################################
 
@@ -85,7 +85,7 @@ class CaptchaGenerator:
 
     def __init__(self):
         self.scene: manim.Scene | None = None
-        self.code: int = None
+        self.code: str = None
         self.width: int = 854
         self.height: int = 480
         self.fps: int = 30
@@ -102,7 +102,7 @@ class CaptchaGenerator:
     ### Public Methods ###
 
     def generate(self,
-                 code: int | None = None,
+                 code: str | None = None,
                  scene: manim.Scene | None = None,
                  out_dir: Path | None = None,
                  tmp_dir: Path | None = None,
@@ -150,7 +150,7 @@ class CaptchaGenerator:
             self.scene = CaptchaScene.get_random_scene()
         # Use a random captcha code number if was not provided
         if self.code is None:
-            self.code = random.randint(1000, 9999)
+            self.code = self._generate_random_code()
         # Set output captcha file (use current path if was not provided)
         if self.out_dir is None:
             self.out_dir = Path(".")
@@ -164,15 +164,15 @@ class CaptchaGenerator:
         # Run Manim to generate the captcha
         self._run_manim()
         generated_file = self._find_generated_file()
-        if generated_file is None:
+        if generated_file:
+            self._move_file(generated_file, out_file)
+            captcha_result.code = self.code
+            captcha_result.file = out_file
+            logger.info("Captcha generated at: %s", out_file)
+        else:
             captcha_result.error = True
             captcha_result.error_info = "Captcha creation fail"
-            return captcha_result
-        self._move_file(generated_file, out_file)
         self._cleanup()
-        captcha_result.code = self.code
-        captcha_result.file = out_file
-        logger.info("Captcha generated at: %s", out_file)
         return captcha_result
 
     ###########################################################################
@@ -192,6 +192,9 @@ class CaptchaGenerator:
         }
         with manim._config.tempconfig(config):
             self.scene(self.code, self.properties).render()
+
+    def _generate_random_code(self, digits: int = 4) -> str:
+        return "".join(random.choices("0123456789", k=digits))
 
     def _find_generated_file(self) -> Path:
         gen_files = list(self.tmp_dir.rglob(f"*.{self.format}"))

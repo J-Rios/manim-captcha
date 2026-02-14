@@ -35,7 +35,7 @@ class PiramidNums(Scene):
     '''
 
     def __init__(self,
-                 captcha_code: int | None = None,
+                 captcha_code: str | int | None = None,
                  properties: dict | None = None,
                  **kwargs):
         super().__init__(**kwargs)
@@ -59,8 +59,10 @@ class PiramidNums(Scene):
         SELECTOR_OPACITY = 0.5
         SELECTOR_RADIUS = 0.6
         NUMBERS_SIZE = 84
-        if self.captcha_code is None:
+        # Ensure the code is an unsigned number (int or str)
+        if not self._is_valid_captcha_code(self.captcha_code):
             return
+        self.captcha_code = str(self.captcha_code)
         # Random 0-9 Numbers
         num_map = {}
         orden = random.sample(range(10), 10)
@@ -108,7 +110,7 @@ class PiramidNums(Scene):
         for num in nums:
             self.play(FadeIn(num, scale=0.1), run_time=0.1)
         # Display Selector transition over numbers
-        l_target_numbers = [int(d) for d in str(abs(self.captcha_code))]
+        l_target_numbers = [int(d) for d in self.captcha_code]
         for target_num in l_target_numbers:
             # Go to target number
             target = num_map[target_num]
@@ -125,5 +127,16 @@ class PiramidNums(Scene):
             rate_func=smooth
         )
         self.wait(1)
+
+    def _is_valid_captcha_code(self, captcha_code: str):
+        valid = False
+        if captcha_code:
+            try:
+                int_captcha_code = int(captcha_code)
+                if int_captcha_code >= 0:
+                    valid = True
+            except ValueError:
+                valid = False
+        return valid
 
 ###############################################################################
