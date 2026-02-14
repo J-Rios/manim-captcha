@@ -15,5 +15,8 @@ Pipfile*
 # Project
 build/
 dist/
+ignore/
 *.log
 *.ignore
+*.gif
+*.mp4
