@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# Description: Script to install system requirements and prepare the
+# project for development.
+
+###############################################################################
+
+# Actual script directory path
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+
+###############################################################################
+
+### Main Functionality ###
+
+# Show Header
+echo ""
+echo "----------------------------------------"
+echo "-- Project Setup                      --"
+echo "----------------------------------------"
+echo ""
+
+# Install System Requirements
+$DIR/install_system_req || exit 1
+
+# Create Virtual Envorionment
+cd $DIR/.. || exit 1
+echo "Creating Virtual Environment, please wait..."
+python3 -m venv .venv || exit 1
+
+# Activate Virtual Environment
+echo "Accesing Virtual Environment..."
+source .venv/bin/activate || exit 1
+
+# Install Project Development Requirements into environment
+echo "Installing Requirements..."
+echo ""
+pip install -r requirements_dev.txt || exit 1
+echo ""
+echo "List of Modules Installed:"
+echo ""
+pip list
+echo ""
+
+# Exit Virtual Environment
+deactivate
+echo "Project setup completed"
+echo ""
+
+exit 0
+
+###############################################################################

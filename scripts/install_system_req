@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# Description: Script to install Debian based system requirements
+
+###############################################################################
+
+### Constants ###
+
+# Actual script directory path
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+
+###############################################################################
+
+### Auxilairy Functions ###
+
+# APT update function
+apt_update()
+{
+    echo "-------------------------------------------------"
+    echo " Updating Repositories"
+    echo "-------------------------------------------------"
+    sudo apt-get update
+    echo ""
+}
+
+# APT install package function
+apt_install()
+{
+    if [ $# -gt 0 ]; then
+        echo "-------------------------------------------------"
+        echo " Installing ${1} package"
+        echo "-------------------------------------------------"
+        sudo apt-get -y install $1
+        if [[ $? != 0 ]]; then
+            echo "Error: Fail to install ${1} package."
+            echo ""
+            exit 1
+        fi
+        echo ""
+    fi
+}
+
+##############################################################################
+
+### Main Functionalities ###
+
+# Installation
+echo "Installing System Requirements..."
+echo ""
+apt_update
+apt_install build-essential
+apt_install python3
+apt_install python3-dev
+apt_install libcairo2-dev
+apt_install libpango1.0-dev
+#apt_install texlive-full  # Only if LaTex is going to be used at Manim
+
+exit 0
+
+##############################################################################
