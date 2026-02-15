@@ -9,6 +9,7 @@ help:
 	@ echo "Usage:"
 	@ echo "  setup: Setup Project and install requirements"
 	@ echo "  test: Run project tests"
+	@ echo "  test-ci: Run project tests for CI execution"
 	@ echo "  check_code_style: Run Code Style Checks"
 	@ echo "  check_static_types: Run Static Types Checks"
 	@ echo ""

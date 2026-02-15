@@ -4,24 +4,29 @@
 # Actual script directory path
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
-TARGET_DIR="${DIR}/../src/manim_captcha"
-
-# Show Header
-echo "-------------------------------------------------"
-echo " Static Type Checks "
-echo "-------------------------------------------------"
-echo ""
+DIR_SRC="${DIR}/../src/manim_captcha"
+DIR_TEST="${DIR}/../tests"
 
 # Activate Virtual Environment
+echo ""
 echo "Accesing Virtual Environment..."
 source ${DIR}/../.venv/bin/activate || exit 1
 echo ""
 
 # Run static type checks
-pyright "$TARGET_DIR"
+echo "-------------------------------------------------"
+echo " Static Type Checks - Source Files "
+echo "-------------------------------------------------"
+pyright "$DIR_SRC"
+echo ""
+echo "-------------------------------------------------"
+echo " Checking Code Style - Test Files "
+echo "-------------------------------------------------"
+pyright "$DIR_TEST"
 echo ""
 
 # Exit Virtual Environment
+echo ""
 deactivate
 echo "Static type checks completed"
 echo ""
