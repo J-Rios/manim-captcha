@@ -1,21 +1,28 @@
 # Editors
 .vscode/
 
-# Python
+# Python Related Directories
 *.egg-info/
 .eggs/
 .idea/
 __pycache__/
 .ruff_cache/
 .venv/
+htmlcov/
+
+# Python Related Files
+.coverage
 Pipfile*
 *.pkl
 *.pyc
 
-# Project
+# Project Directories
 build/
 dist/
 ignore/
+tmp/
+
+# Project Files
 *.log
 *.ignore
 *.gif

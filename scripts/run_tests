@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# Description: Script to run project tests.
+
+###############################################################################
+
+#!/usr/bin/env bash
+set -e
+
+###############################################################################
+
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+PROJECT_ROOT="$DIR/.."
+
+###############################################################################
+
+echo ""
+echo "----------------------------------------"
+echo "-- Project Tests                      --"
+echo "----------------------------------------"
+echo ""
+
+# Activate Virtual Environment
+if [ -f "$PROJECT_ROOT/.venv/bin/activate" ]; then
+    echo "Activating virtual environment..."
+    source "$PROJECT_ROOT/.venv/bin/activate"
+else
+    echo "Virtual environment not found."
+    exit 1
+fi
+
+# Run tests (for local or CI)
+if [[ "$1" == "--ci" ]]; then
+    echo "Running in CI mode..."
+    echo ""
+    pytest --cov=manim_captcha --cov-report=term --cov-report=html
+    mv htmlcov/ build/htmlcov
+else
+    echo "Running in standard mode..."
+    echo ""
+    pytest -v -s
+fi
+
+echo ""
+
+# Deactivate
+if command -v deactivate >/dev/null 2>&1; then
+    deactivate
+fi
+
+echo "Test run completed"
+echo ""
+
+###############################################################################

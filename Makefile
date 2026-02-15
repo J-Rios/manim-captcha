@@ -8,6 +8,7 @@ help:
 	@ echo ""
 	@ echo "Usage:"
 	@ echo "  setup: Setup Project and install requirements"
+	@ echo "  test: Run project tests"
 	@ echo "  check_code_style: Run Code Style Checks"
 	@ echo "  check_static_types: Run Static Types Checks"
 	@ echo ""
@@ -15,6 +16,14 @@ help:
 setup:
 	@ chmod +x $(SCRIPTS)/*
 	@ $(SCRIPTS)/setup
+
+test:
+	@ chmod +x $(SCRIPTS)/*
+	@ $(SCRIPTS)/run_tests
+
+test-ci:
+	@ chmod +x $(SCRIPTS)/*
+	@ $(SCRIPTS)/run_tests --ci
 
 check_code_style:
 	@ chmod +x $(SCRIPTS)/*
