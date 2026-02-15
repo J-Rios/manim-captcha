@@ -21,7 +21,7 @@ Version:
 ###############################################################################
 
 # Standard Libraries
-import random
+import secrets
 
 # Third-Party Libraries
 import manim
@@ -67,7 +67,7 @@ class PiramidNums(manim.Scene):
         self.captcha_code = str(self.captcha_code)
         # Random 0-9 Numbers
         num_map = {}
-        orden = random.sample(range(10), 10)
+        orden = secrets.SystemRandom().sample(range(10), 10)
         nums = manim.VGroup()
         for n in orden:
             t = manim.Text(str(n), font_size=NUMBERS_SIZE,

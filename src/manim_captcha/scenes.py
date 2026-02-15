@@ -21,7 +21,7 @@ Version:
 ###############################################################################
 
 # Standard Libraries
-import random
+import secrets
 
 # Third-Party Libraries
 import manim
@@ -51,6 +51,6 @@ class CaptchaScene:
             v for v in vars(CaptchaScene).values()
             if isinstance(v, type) and issubclass(v, manim.Scene)
         ]
-        return random.choice(scenes)
+        return secrets.choice(scenes)
 
 ###############################################################################

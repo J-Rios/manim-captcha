@@ -79,15 +79,13 @@ def test_captcha_creation_invalid_code():
 
 def test_captcha_creation_default():
     OUT_DIR = BUILD_DIR / "default"
+    NUM_CAPTCHAS_TO_GENERATE = 3
     generator = CaptchaGenerator()
-    # Default Generation 1
-    captcha = generator.generate(out_dir=OUT_DIR)
-    show_result(captcha)
-    assert not captcha.error
-    # Default Generation 2
-    captcha = generator.generate(out_dir=OUT_DIR)
-    show_result(captcha)
-    assert not captcha.error
+    # Default Generation
+    for _ in range(NUM_CAPTCHAS_TO_GENERATE):
+        captcha = generator.generate(out_dir=OUT_DIR)
+        show_result(captcha)
+        assert not captcha.error
 
 
 def test_captcha_creation_short_long():

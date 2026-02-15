@@ -25,7 +25,7 @@ Version:
 ###############################################################################
 
 import logging
-import random
+import secrets
 import shutil
 
 from pathlib import Path
@@ -179,7 +179,7 @@ class CaptchaGenerator:
             scene(code, properties).render()
 
     def _generate_random_code(self, digits: int = 4) -> str:
-        return "".join(random.choices("0123456789", k=digits))
+        return "".join(secrets.choice("0123456789") for _ in range(digits))
 
     def _find_file(self, directory, file_extension) -> Path | None:
         gen_files = list(directory.rglob(f"*.{file_extension}"))
