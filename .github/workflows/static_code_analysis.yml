@@ -1,0 +1,46 @@
+
+###############################################################################
+
+name: Static Code Analysis
+
+###############################################################################
+
+# Trigger the jobs on:
+# - A pull request is opened or a new commit is added to the pull request
+# - A new release is created or a release is edited
+on:
+  pull_request:
+    branches: [ main, development ]
+    types: [opened, synchronize]
+  release:
+    types: [published, edited]
+
+###############################################################################
+
+# Jobs to run
+jobs:
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Setup Project
+        run: |
+          make setup
+
+      - name: lint
+        run: |
+          make check_code_style
+
+      - name: type checking
+        run: |
+          make check_static_types
+
+###############################################################################
