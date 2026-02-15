@@ -20,17 +20,19 @@ Version:
 # Libraries
 ###############################################################################
 
+# Standard Libraries
 import math
 import random
 
-from manim import *
+# Third-Party Libraries
+import manim
 
 
 ###############################################################################
 # Scene
 ###############################################################################
 
-class CircleNums(Scene):
+class CircleNums(manim.Scene):
     '''
     Manim captcha scene of numbers in a circular distribution animation.
     '''
@@ -41,9 +43,9 @@ class CircleNums(Scene):
                  **kwargs):
         super().__init__(**kwargs)
         self.captcha_code = captcha_code
-        self.bg_color = BLACK
-        self.draw_color = WHITE
-        self.selector_color = BLUE_D
+        self.bg_color = manim.BLACK
+        self.draw_color = manim.WHITE
+        self.selector_color = manim.BLUE_D
         self.container_color = self.bg_color
         if properties:
             if "bg_color" in properties:
@@ -68,42 +70,37 @@ class CircleNums(Scene):
         # Random 0-9 Numbers
         num_map = {}
         orden = random.sample(range(10), 10)
-        nums = VGroup()
+        nums = manim.VGroup()
         for n in orden:
-            t = Text(str(n), font_size=NUMBERS_SIZE, color=self.draw_color)
+            t = manim.Text(str(n), font_size=NUMBERS_SIZE,
+                           color=self.draw_color)
             nums.add(t)
             num_map[n] = t
         # Numbers distribution
         for i, num in enumerate(nums):
             angle = 2 * math.pi * i / len(nums)
-            pos = NUMBERS_RADIUS * np.array([
+            pos = NUMBERS_RADIUS * manim.np.array([
                 math.cos(angle),
                 math.sin(angle),
                 0
             ])
             num.move_to(pos)
-        # Draw background image (only supported with cairo renderer)
-        # bg = ImageMobject("aaa.png")
-        # bg.scale_to_fit_height(config.frame_height)
-        # bg.scale_to_fit_width(config.frame_width)
-        # bg.move_to(ORIGIN)
-        # self.add(bg)
         # Draw Container
-        container = Circle(radius=CONTAINER_RADIUS,
-                           stroke_width=10,
-                           color=self.draw_color,
-                           fill_color=self.container_color,
-                           fill_opacity=1.0)
+        container = manim.Circle(radius=CONTAINER_RADIUS,
+                                 stroke_width=10,
+                                 color=self.draw_color,
+                                 fill_color=self.container_color,
+                                 fill_opacity=1.0)
         self.add(container)
         # Draw Selector
-        selector = Circle(radius=SELECTOR_RADIUS,
-                          color=self.draw_color,
-                          fill_color=self.selector_color,
-                          fill_opacity=SELECTOR_OPACITY)
+        selector = manim.Circle(radius=SELECTOR_RADIUS,
+                                color=self.draw_color,
+                                fill_color=self.selector_color,
+                                fill_opacity=SELECTOR_OPACITY)
         self.add(selector)
         # Display numbers with fade-in
         for num in nums:
-            self.play(FadeIn(num, scale=0.1), run_time=0.1)
+            self.play(manim.FadeIn(num, scale=0.1), run_time=0.1)
         # Display Selector transition over numbers
         l_target_numbers = [int(d) for d in self.captcha_code]
         for target_num in l_target_numbers:
@@ -112,18 +109,18 @@ class CircleNums(Scene):
             self.play(
                 selector.animate.move_to(target.get_center()),
                 run_time=0.6,
-                rate_func=smooth
+                rate_func=manim.smooth
             )
             self.wait(0.2)
             # Move Selector to original position
             self.play(
-                selector.animate.move_to(ORIGIN),
+                selector.animate.move_to(manim.ORIGIN),
                 run_time=0.6,
-                rate_func=smooth
+                rate_func=manim.smooth
             )
         self.wait(1)
 
-    def _is_valid_captcha_code(self, captcha_code: str):
+    def _is_valid_captcha_code(self, captcha_code: str | int | None):
         valid = False
         if captcha_code:
             try:

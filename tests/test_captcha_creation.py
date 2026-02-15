@@ -20,9 +20,8 @@ Version:
 # Libraries
 ###############################################################################
 
-import pytest
-
 from pathlib import Path
+from manim.constants import RendererType
 from manim_captcha.generator import CaptchaGenerator
 from manim_captcha.scenes import CaptchaScene
 from manim_captcha.colors import CaptchaColor, CaptchaColorCustom
@@ -40,6 +39,7 @@ BUILD_DIR = BASE_DIR / "../build/captchas"
 
 ### Auxiliary FUnctions ###
 
+
 def show_result(captcha):
     if captcha.error:
         print(captcha.error_info)
@@ -55,12 +55,14 @@ def show_result(captcha):
 
 ### Test Functions ###
 
+
 def test_captcha_creation_invalid_code():
     OUT_DIR = BUILD_DIR / "invalid"
     generator = CaptchaGenerator()
     # Invalid Generation 1: Negative integer for circle nums captcha
-    captcha = generator.generate(-123, scene=CaptchaScene.CIRCLE_NUMS,
-                                 out_dir=OUT_DIR)
+    captcha = generator.generate(
+        -123, scene=CaptchaScene.CIRCLE_NUMS,  # type: ignore[arg-type]
+        out_dir=OUT_DIR)
     show_result(captcha)
     assert captcha.error
     # Invalid Generation 2: Negative number for circle nums captcha
@@ -106,12 +108,12 @@ def test_captcha_creation_render():
     generator = CaptchaGenerator()
     # Cairo Renderer Generation
     captcha = generator.generate("1234", scene=CaptchaScene.CIRCLE_NUMS,
-                                 renderer="cairo", out_dir=OUT_DIR)
+                                 renderer=RendererType.CAIRO, out_dir=OUT_DIR)
     show_result(captcha)
     assert not captcha.error
     # OpenGL Renderer Generation
     captcha = generator.generate("5678", scene=CaptchaScene.CIRCLE_NUMS,
-                                 renderer="opengl", out_dir=OUT_DIR)
+                                 renderer=RendererType.OPENGL, out_dir=OUT_DIR)
     show_result(captcha)
     assert not captcha.error
 
@@ -141,7 +143,7 @@ def test_captcha_creation_theme_dark():
         "bg_color": CaptchaColorCustom("#0E1621"),
         "draw_color": CaptchaColor.WHITE,
         "selector_color": CaptchaColor.BLUE_D,
-        "container_color": CaptchaColorCustom("#17212B")
+        "container_color": CaptchaColorCustom("#1F1F1F")
     }
     OUT_DIR = BUILD_DIR / "theme_dark"
     generator = CaptchaGenerator()

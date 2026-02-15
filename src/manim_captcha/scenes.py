@@ -46,7 +46,7 @@ class CaptchaScene:
     # ...
 
     @staticmethod
-    def get_random_scene():
+    def get_random_scene() -> type[manim.Scene]:
         scenes = [
             v for v in vars(CaptchaScene).values()
             if isinstance(v, type) and issubclass(v, manim.Scene)
