@@ -139,43 +139,39 @@ def test_captcha_creation_builtin_scenes():
     assert not captcha.error
 
 
-def test_captcha_creation_theme_dark():
-    theme_dark = {
-        "bg_color": CaptchaColorCustom("#0E1621"),
-        "draw_color": CaptchaColor.WHITE,
-        "selector_color": CaptchaColor.BLUE_D,
-        "container_color": CaptchaColorCustom("#1F1F1F")
-    }
-    OUT_DIR = BUILD_DIR / "theme_dark"
+def test_captcha_creation_builtin_themes():
+    OUT_DIR = BUILD_DIR / "themes"
     generator = CaptchaGenerator()
-    properties = theme_dark
-    # Captcha Generation - Circle Nums
+    # Captcha Generation - Default Theme
+    properties = { "theme": "default" }
     captcha = generator.generate("1234", scene=CaptchaScene.CIRCLE_NUMS,
                                  properties=properties, out_dir=OUT_DIR)
     show_result(captcha)
     assert not captcha.error
-    # Captcha Generation - Matrix Nums
-    captcha = generator.generate("5678", scene=CaptchaScene.MATRIX_NUMS,
+    # Captcha Generation - Dark Theme
+    properties = { "theme": "dark" }
+    captcha = generator.generate("5678", scene=CaptchaScene.CIRCLE_NUMS,
                                  properties=properties, out_dir=OUT_DIR)
     show_result(captcha)
     assert not captcha.error
-    # Captcha Generation - Piramid Nums
-    captcha = generator.generate("9012", scene=CaptchaScene.PIRAMID_NUMS,
+    # Captcha Generation - Light Theme
+    properties = { "theme": "light" }
+    captcha = generator.generate("9012", scene=CaptchaScene.CIRCLE_NUMS,
                                  properties=properties, out_dir=OUT_DIR)
     show_result(captcha)
     assert not captcha.error
 
 
-def test_captcha_creation_theme_light():
-    theme_light = {
-        "bg_color": CaptchaColorCustom("#6FA788"),
-        "draw_color": CaptchaColor.BLACK,
-        "selector_color": CaptchaColor.RED_D,
-        "container_color": CaptchaColor.WHITE,
+def test_captcha_creation_custom_theme():
+    theme = {
+        "bg_color": CaptchaColorCustom("#84D5E9"),
+        "draw_color": CaptchaColorCustom("#FDA552"),
+        "selector_color": CaptchaColorCustom("#FDC189"),
+        "container_color": CaptchaColorCustom("#FBFCC0")
     }
-    OUT_DIR = BUILD_DIR / "theme_light"
+    OUT_DIR = BUILD_DIR / "theme_custom"
     generator = CaptchaGenerator()
-    properties = theme_light
+    properties = theme
     # Captcha Generation - Circle Nums
     captcha = generator.generate("1234", scene=CaptchaScene.CIRCLE_NUMS,
                                  properties=properties, out_dir=OUT_DIR)
