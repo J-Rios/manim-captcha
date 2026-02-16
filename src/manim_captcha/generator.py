@@ -91,6 +91,10 @@ class CaptchaGenerator:
 
     ### Public Methods ###
 
+    def is_available(self):
+        '''Get Generator availability.'''
+        return self.available
+
     def generate(self,
                  code: str | None = None,
                  scene: type[manim.Scene] | None = None,
@@ -135,7 +139,6 @@ class CaptchaGenerator:
         # Use current path for temporary directory if was not provided
         if tmp_dir is None:
             tmp_dir = out_dir / "tmp"
-        tmp_dir = tmp_dir
         # Set background color
         bg_color = CaptchaColor.BLACK
         if properties:
