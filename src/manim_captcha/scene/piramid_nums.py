@@ -8,10 +8,8 @@ Description:
     Manim captcha scene of numbers in a piramid distribution animation.
 Author:
     Jose Miguel Rios Rubio
-Creation date:
-    14/02/2026
-Last modified date:
-    14/02/2026
+Date:
+    16/02/2026
 Version:
     1.0.0
 """
@@ -21,6 +19,7 @@ Version:
 ###############################################################################
 
 # Standard Libraries
+import random
 import secrets
 
 # Third-Party Libraries
@@ -63,12 +62,12 @@ class PiramidNums(manim.Scene):
                  **kwargs):
         super().__init__(**kwargs)
         self.captcha_code = captcha_code
-        self.bg_color = manim.BLACK
-        self.draw_color = manim.WHITE
-        self.selector_color = manim.BLUE_D
-        self.container_color = self.bg_color
+        self.noise = False
+        self._apply_theme(self.theme_default)
         # Configure properties
         if properties:
+            if "noise" in properties:
+                self.noise = properties["noise"]
             if "theme" in properties:
                 if properties["theme"] == "dark":
                     self._apply_theme(self.theme_dark)
@@ -133,6 +132,9 @@ class PiramidNums(manim.Scene):
             stroke_opacity=1.0
         )
         self.add(container)
+        # Display noise
+        if self.noise:
+            self._add_noise(num_lines=25, num_dots=35, width=8, height=8)
         # Draw Selector
         selector = manim.Circle(radius=SELECTOR_RADIUS,
                                 color=self.draw_color,
@@ -161,6 +163,62 @@ class PiramidNums(manim.Scene):
             rate_func=manim.smooth
         )
         self.wait(1)
+
+    def _add_noise(self, num_lines=20, num_dots=30, width=8, height=6):
+        '''Add noise particles free moving around the image.'''
+        DOTS_RADIUS_MIN_MAX = (0.04, 0.08)
+        LINES_STROKE_WIDTH_MIN_MAX = (3, 8)
+        noise_group = manim.VGroup()
+        # Slim Lines
+        for _ in range(num_lines):
+            start = manim.np.array([
+                random.uniform(-width/2, width/2),
+                random.uniform(-height/2, height/2),
+                0
+            ])
+            end = start + manim.np.array([
+                random.uniform(-0.5, 0.5),
+                random.uniform(-0.5, 0.5),
+                0
+            ])
+            stroke_width = random.uniform(
+                LINES_STROKE_WIDTH_MIN_MAX[0], LINES_STROKE_WIDTH_MIN_MAX[1])
+            line = manim.Line(
+                start, end, stroke_width=stroke_width, color=self.draw_color)
+            line._velocity = manim.np.array([
+                random.uniform(-0.02, 0.02),
+                random.uniform(-0.02, 0.02),
+                0
+            ])
+            noise_group.add(line)
+        # Small Dots
+        for _ in range(num_dots):
+            pos = manim.np.array([
+                random.uniform(-width/2, width/2),
+                random.uniform(-height/2, height/2),
+                0
+            ])
+            radius = random.uniform(
+                DOTS_RADIUS_MIN_MAX[0], DOTS_RADIUS_MIN_MAX[1])
+            dot = manim.Dot(point=pos, radius=radius, color=self.draw_color)
+            dot._velocity = manim.np.array([
+                random.uniform(-0.03, 0.03),
+                random.uniform(-0.03, 0.03),
+                0
+            ])
+            noise_group.add(dot)
+        self.add(noise_group)
+        # Noise movement animation updater
+        def move_noise_smooth(mob, dt):
+            for obj in mob:
+                # Move and reflect at borders
+                obj.shift(obj._velocity)
+                x, y, _ = obj.get_center()
+                if x < -width/2 or x > width/2:
+                    obj._velocity[0] *= -1
+                if y < -height/2 or y > height/2:
+                    obj._velocity[1] *= -1
+        noise_group.add_updater(move_noise_smooth)
 
     def _is_valid_captcha_code(self, captcha_code: str | int | None):
         valid = False
