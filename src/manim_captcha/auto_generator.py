@@ -130,6 +130,21 @@ class CaptchaAutoGenerator:
             await self._task_remove
             self._task_remove = None
 
+    def is_running(self) -> bool:
+        '''Get Captcha Generator manager running status.'''
+        return self._running
+
+    def num_captchas(self) -> int:
+        '''
+        Get the number of generated captcha files availables in the
+        file system.
+        '''
+        try:
+            return sum(1 for _ in self.out_dir.glob(f"*.{self.format}"))
+        except Exception:
+            logger.exception("Fail to get number of captchas files available")
+            return 0
+
     def get_captcha(self) -> CaptchaData:
         '''Return a random captcha file from storage.'''
         captcha_result = CaptchaData()
@@ -166,12 +181,7 @@ class CaptchaAutoGenerator:
             await asyncio.sleep(self.interval_s)
 
     async def _generate_captcha(self):
-        """Generate one captcha."""
-        # Dont generate if number of captchas is at max_items limit
-        files = list(self.out_dir.glob(f"*.{self.format}"))
-        if len(files) >= self.max_items:
-            return
-        # Generate a new captcha
+        """Generate a captcha."""
         loop = asyncio.get_running_loop()
         result = await loop.run_in_executor(
             None,
@@ -194,16 +204,16 @@ class CaptchaAutoGenerator:
         while self._running:
             try:
                 async with self._lock:
-                    await self._process_remove()
+                    self._process_remove()
             except Exception:
                 logger.error(format_exc())
-            await asyncio.sleep(1)
+            await asyncio.sleep(self.interval_s)
 
     def _process_remove(self):
         """Remove oldest file if limit exceeded."""
         # Dont remove if number of captchas is less than max_items limit
         files = list(self.out_dir.glob(f"*.{self.format}"))
-        if len(files) <= self.max_items:
+        if len(files) < self.max_items:
             return
         # Remove oldest captcha file
         files.sort(key=lambda p: p.stat().st_mtime)
