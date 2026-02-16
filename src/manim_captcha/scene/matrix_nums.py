@@ -36,6 +36,27 @@ class MatrixNums(manim.Scene):
     Manim captcha scene of numbers in a matrix distribution animation.
     '''
 
+    theme_default = {
+        "bg_color": manim.BLACK,
+        "draw_color": manim.WHITE,
+        "selector_color": manim.BLUE_D,
+        "container_color": manim.BLACK,
+    }
+
+    theme_dark = {
+        "bg_color": manim.ManimColor("#0E1621"),
+        "draw_color": manim.WHITE,
+        "selector_color": manim.BLUE_D,
+        "container_color": manim.ManimColor("#1F1F1F")
+    }
+
+    theme_light = {
+        "bg_color": manim.ManimColor("#6FA788"),
+        "draw_color": manim.BLACK,
+        "selector_color": manim.RED_D,
+        "container_color": manim.WHITE,
+    }
+
     def __init__(self,
                  captcha_code: str | int | None = None,
                  properties: dict | None = None,
@@ -46,7 +67,15 @@ class MatrixNums(manim.Scene):
         self.draw_color = manim.WHITE
         self.selector_color = manim.BLUE_D
         self.container_color = self.bg_color
+        # Configure properties
         if properties:
+            if "theme" in properties:
+                if properties["theme"] == "dark":
+                    self._apply_theme(self.theme_dark)
+                elif properties["theme"] == "light":
+                    self._apply_theme(self.theme_light)
+                else:
+                    self._apply_theme(self.theme_default)
             if "bg_color" in properties:
                 self.bg_color = properties["bg_color"]
             if "draw_color" in properties:
@@ -55,6 +84,8 @@ class MatrixNums(manim.Scene):
                 self.selector_color = properties["selector_color"]
             if "container_color" in properties:
                 self.container_color = properties["container_color"]
+        # Apply background color
+        self.camera.background_color = self.bg_color
 
     def construct(self):
         SELECTOR_OPACITY = 0.5
@@ -130,5 +161,11 @@ class MatrixNums(manim.Scene):
             except ValueError:
                 valid = False
         return valid
+
+    def _apply_theme(self, theme):
+        self.bg_color = theme["bg_color"]
+        self.draw_color = theme["draw_color"]
+        self.selector_color = theme["selector_color"]
+        self.container_color = theme["container_color"]
 
 ###############################################################################
