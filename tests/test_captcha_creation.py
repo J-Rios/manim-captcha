@@ -20,7 +20,10 @@ Version:
 # Libraries
 ###############################################################################
 
+# Standard Libraries
 from pathlib import Path
+
+# Manim Library
 from manim.constants import RendererType
 from manim_captcha.generator import CaptchaGenerator
 from manim_captcha.scenes import CaptchaScene
@@ -35,10 +38,10 @@ from manim_captcha.colors import CaptchaColor, CaptchaColorCustom
 BASE_DIR = Path(__file__).resolve().parent
 BUILD_DIR = BASE_DIR / "../build/captchas"
 
+
 ###############################################################################
-
-### Auxiliary FUnctions ###
-
+# Auxiliary Functions
+###############################################################################
 
 def show_result(captcha):
     if captcha.error:
@@ -51,10 +54,10 @@ def show_result(captcha):
     print(f"  File: {captcha.file}")
     print("")
 
+
 ###############################################################################
-
-### Test Functions ###
-
+# Test Functions
+###############################################################################
 
 def test_captcha_creation_invalid_code():
     OUT_DIR = BUILD_DIR / "invalid"

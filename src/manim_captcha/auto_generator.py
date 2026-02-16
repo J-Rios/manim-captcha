@@ -46,7 +46,8 @@ from traceback import format_exc
 # Local Libraries
 ###############################################################################
 
-from manim_captcha.generator import CaptchaGenerator
+from .data import CaptchaData
+from .generator import CaptchaGenerator
 
 
 ###############################################################################
@@ -73,14 +74,7 @@ class CaptchaAutoGenerator:
 
     ### Data Types ###
 
-    class CaptchaData:
-        """Captcha information."""
-
-        def __init__(self):
-            self.code: str = ""
-            self.file: Path | None = None
-            self.error: bool = False
-            self.error_info: str = ""
+    # None
 
     ###########################################################################
 
@@ -138,7 +132,7 @@ class CaptchaAutoGenerator:
 
     def get_captcha(self) -> CaptchaData:
         '''Return a random captcha file from storage.'''
-        captcha_result = self.CaptchaData()
+        captcha_result = CaptchaData()
         if not self.available:
             captcha_result.error = True
             captcha_result.error_info = "Manim not found in the system"

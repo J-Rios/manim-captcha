@@ -45,6 +45,7 @@ from manim.constants import RendererType
 ###############################################################################
 
 from .colors import CaptchaColor
+from .data import CaptchaData
 from .scenes import CaptchaScene
 
 ###############################################################################
@@ -71,14 +72,7 @@ class CaptchaGenerator:
 
     ### Data Types ###
 
-    class CaptchaData:
-        """Captcha information."""
-
-        def __init__(self):
-            self.code: str = ""
-            self.file: Path | None = None
-            self.error: bool = False
-            self.error_info: str = ""
+    # None
 
     ###########################################################################
 
@@ -120,7 +114,7 @@ class CaptchaGenerator:
         - format: Captcha output format (mp4/gif).
         - rendered: Video renderer to use (cairo/opengl).
         """
-        captcha_result = self.CaptchaData()
+        captcha_result = CaptchaData()
         # Do nothing if Manim is not available
         if not self.available:
             captcha_result.error = True
