@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# Description: Script to publish current version of the library to pypi.
+
+###############################################################################
+
+# Set exit on any error
+set -e
+
+# Actual script directory path
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+
+###############################################################################
+
+### Main Functionality ###
+
+# Show Header
+echo ""
+echo "----------------------------------------"
+echo "-- Library Publish                    --"
+echo "----------------------------------------"
+echo ""
+
+# Activate Virtual Environment
+echo "Accesing Virtual Environment..."
+cd $DIR/..
+source .venv/bin/activate
+
+# Install Project Development Requirements into environment
+echo "Building project package..."
+echo ""
+python -m build
+echo ""
+echo "Publishing package to pypi..."
+twine upload dist/*
+git push && git push --tags
+echo ""
+echo "Library Published!"
+echo ""
+
+# Exit Virtual Environment
+deactivate
+echo ""
+
+exit 0
+
+###############################################################################

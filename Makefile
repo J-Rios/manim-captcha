@@ -12,6 +12,7 @@ help:
 	@ echo "  test_ci: Run project tests for CI execution"
 	@ echo "  check_code_style: Run Code Style Checks"
 	@ echo "  check_static_types: Run Static Types Checks"
+	@ echo "  install: Install local package in edit mode"
 	@ echo "  publish: Publish the library to pypi"
 	@ echo ""
 
@@ -26,6 +27,10 @@ check_static_types:
 install:
 	@ chmod +x $(SCRIPTS)/*
 	@ $(SCRIPTS)/install
+
+publish:
+	@ chmod +x $(SCRIPTS)/*
+	@ $(SCRIPTS)/publish
 
 setup:
 	@ chmod +x $(SCRIPTS)/*
