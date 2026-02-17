@@ -32,7 +32,6 @@ python -m build
 echo ""
 echo "Publishing package to pypi..."
 twine upload dist/*
-git push && git push --tags
 echo ""
 echo "Library Published!"
 echo ""
