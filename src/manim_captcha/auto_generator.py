@@ -193,7 +193,7 @@ class CaptchaAutoGenerator:
         if result.error:
             logger.error("Captcha generation failed: %s", result.error_info)
         else:
-            logger.info("Generated captcha: %s", result.file)
+            logger.debug("Generated captcha: %s", result.file)
 
     ###########################################################################
 

@@ -80,6 +80,8 @@ class CaptchaGenerator:
 
     def __init__(self):
         self.available: bool = self._is_manim_available()
+        if self.available:
+            logging.getLogger("manim").setLevel(logging.ERROR)
 
     ###########################################################################
 
@@ -147,7 +149,7 @@ class CaptchaGenerator:
             self._move_file(generated_file, out_file)
             captcha_result.code = code
             captcha_result.file = out_file
-            logger.info("Captcha generated at: %s", out_file)
+            logger.info("Generated captcha: %s", out_file)
         else:
             captcha_result.error = True
             captcha_result.error_info = "Captcha creation fail"
@@ -170,6 +172,7 @@ class CaptchaGenerator:
             "frame_rate": fps,
             "background_color": bg_color,
             "media_dir": str(media_dir),
+            "progress_bar": "none",
             "preview": False
         }
         with manim._config.tempconfig(config):
