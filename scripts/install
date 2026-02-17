@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Description: Script to install local package in edit mode for
+# development.
+
+###############################################################################
+
+# Set exit on any error
+set -e
+
+# Actual script directory path
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+
+###############################################################################
+
+### Main Functionality ###
+
+# Show Header
+echo ""
+echo "----------------------------------------"
+echo "-- Local Install                      --"
+echo "----------------------------------------"
+echo ""
+
+# Activate Virtual Environment
+echo "Accesing Virtual Environment..."
+cd $DIR/..
+source .venv/bin/activate
+
+# Install local package in edit mode for develoment
+echo "Installing as local package..."
+echo ""
+pip install -e .
+echo "Local library installed!"
+echo ""
+
+# Exit Virtual Environment
+deactivate
+echo ""
+
+exit 0
+
+###############################################################################
