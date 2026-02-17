@@ -18,6 +18,7 @@ Pipfile*
 
 # Project Directories
 build/
+captchas/
 dist/
 ignore/
 tmp/
