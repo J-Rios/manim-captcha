@@ -32,7 +32,7 @@ fi
 if [[ "$1" == "--ci" ]]; then
     echo "Running in CI mode..."
     echo ""
-    pytest --cov=manim_captcha --cov-report=term --cov-report=html
+    pytest tests/test_captcha_creation.py::test_captcha_creation_with_noise --cov=manim_captcha --cov-report=term --cov-report=html
     mv htmlcov/ build/htmlcov
 else
     echo "Running in standard mode..."

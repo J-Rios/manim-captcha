@@ -2,14 +2,14 @@
 SHELL = /bin/bash
 SCRIPTS="./scripts"
 
-.PHONY: help start kill status monitor errors
+.PHONY: help setup test test_ci check_code_style check_static_types
 
 help:
 	@ echo ""
 	@ echo "Usage:"
 	@ echo "  setup: Setup Project and install requirements"
 	@ echo "  test: Run project tests"
-	@ echo "  test-ci: Run project tests for CI execution"
+	@ echo "  test_ci: Run project tests for CI execution"
 	@ echo "  check_code_style: Run Code Style Checks"
 	@ echo "  check_static_types: Run Static Types Checks"
 	@ echo ""
@@ -22,7 +22,7 @@ test:
 	@ chmod +x $(SCRIPTS)/*
 	@ $(SCRIPTS)/run_tests
 
-test-ci:
+test_ci:
 	@ chmod +x $(SCRIPTS)/*
 	@ $(SCRIPTS)/run_tests --ci
 
