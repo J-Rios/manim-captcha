@@ -8,7 +8,7 @@
 
 ## Overview
 
-Python library to ease creation of captcha videos based on [Manim Framework](https://github.com/ManimCommunity/manim).
+Animated visual captcha generation library using [Manim Framework](https://github.com/ManimCommunity/manim).
 
 Traditional CAPTCHAs are static images. Manim-Captcha generates animated visual challenges (e.g., moving selectors, distributed numbers, dynamic noise).
 
