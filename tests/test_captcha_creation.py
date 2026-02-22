@@ -209,7 +209,7 @@ def test_captcha_creation_with_noise():
     rmdir(OUT_DIR)
     generator = CaptchaGenerator()
     properties = {
-        "theme": "dark",
+        "theme": "random",
         "noise": True
     }
     # Captcha Generation - Circle Nums

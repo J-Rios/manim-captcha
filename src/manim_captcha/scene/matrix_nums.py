@@ -9,9 +9,9 @@ Description:
 Author:
     Jose Miguel Rios Rubio
 Date:
-    16/02/2026
+    22/02/2026
 Version:
-    1.0.0
+    1.1.0
 """
 
 ###############################################################################
@@ -73,6 +73,12 @@ class MatrixNums(manim.Scene):
                     self._apply_theme(self.theme_dark)
                 elif properties["theme"] == "light":
                     self._apply_theme(self.theme_light)
+                elif properties["theme"] == "random":
+                    list_themes = list(
+                        [self.theme_default, self.theme_dark, self.theme_light]
+                    )
+                    random_theme = secrets.choice(list_themes)
+                    self._apply_theme(random_theme)
                 else:
                     self._apply_theme(self.theme_default)
             if "bg_color" in properties:

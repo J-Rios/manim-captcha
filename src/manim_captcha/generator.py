@@ -9,7 +9,7 @@ Description:
     This component allows you to generate a captcha video file using
     Manim library according to the specified parameters.
     The captcha scene to be used in the captcha can be provided as
-    custom scene or define from some builtint predefined scenes.
+    custom scene or define from some builtin predefined scenes.
 Author:
     Jose Miguel Rios Rubio
 Creation date:

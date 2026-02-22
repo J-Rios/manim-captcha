@@ -12,6 +12,7 @@ captcha = generator.generate(
     code="1234",
     scene=CaptchaScene.CIRCLE_NUMS,
     out_dir=Path("./captchas"),
+    format="mp4",
     properties={
         "theme": "dark",
         "noise": True
