@@ -1,7 +1,7 @@
 
 #
 # This example shows how to use the CaptchaAutoGenerator for generating
-# captchas without blocking (requires usage of asyncio).
+# specific captchas scenes without blocking (requires usage of asyncio).
 #
 # Note: The CaptchaAutoGenerator acts as a "producer" of captchas and
 # you can have multiple "consumers" of the generated captchas in your
@@ -27,6 +27,7 @@ import asyncio
 import logging
 import shutil
 from manim_captcha.auto_generator import CaptchaAutoGenerator
+from manim_captcha.scenes import CaptchaScene
 from pathlib import Path
 
 
@@ -68,13 +69,22 @@ async def main():
     rmdir(OUT_DIR)
     auto_generator = CaptchaAutoGenerator(
         OUT_DIR, TIME_GEN_INTERVAL_S, MAX_NUM_CAPTCHAS)
+    # Add Captcha Scenes to be generated
+    logger.info("Adding Captcha Scenes to be generated...")
+    logger.info("Add: Circle nums with dark theme and noise")
+    auto_generator.add_captcha_scene(CaptchaScene.CIRCLE_NUMS,
+                                     {"theme": "dark", "noise": True})
+    logger.info("Add: Matrix nums scene with light theme and noise")
+    auto_generator.add_captcha_scene(CaptchaScene.MATRIX_NUMS,
+                                     {"theme": "light", "noise": True})
+    # ...
     # Start the generator process
     start_success = await auto_generator.start()
     if not start_success:
         logger.error("Fail to Start CaptchaAutoGenerator")
         return
     # Wait and get some captchas during 1 minute
-    TIME_CHECK = 60
+    TIME_CHECK_S = 120
     time_pass_s = 0
     run = True
     while run:
@@ -90,7 +100,7 @@ async def main():
         await asyncio.sleep(TIME_GEN_INTERVAL_S)
         # Check if check end time has arrive to exit the loop
         time_pass_s = time_pass_s + TIME_GEN_INTERVAL_S
-        if time_pass_s >= TIME_CHECK:
+        if time_pass_s >= TIME_CHECK_S:
             run = False
     # Stop the generator process
     await auto_generator.stop()
