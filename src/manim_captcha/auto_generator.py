@@ -39,7 +39,8 @@ from traceback import format_exc
 # Third-Party Libraries
 ###############################################################################
 
-# None
+from manim import Scene
+from manim.constants import RendererType
 
 
 ###############################################################################
@@ -94,6 +95,7 @@ class CaptchaAutoGenerator:
         rotate mechanism will be replacing older captchas with newer
         ones).
         '''
+        self.list_scenes: list = list()
         self.out_dir = out_dir
         self.interval_s = interval_s
         self.max_items = max_items
@@ -108,6 +110,27 @@ class CaptchaAutoGenerator:
     ###########################################################################
 
     ### Public Methods ###
+
+    def add_captcha_scene(self,
+                          scene: type[Scene],
+                          properties: dict | None = None,
+                          width: int = 854,
+                          height: int = 480,
+                          fps: int = 30,
+                          format: str = "mp4",
+                          renderer: RendererType = RendererType.CAIRO):
+        '''Add a scene to the list of captchas to be generated.'''
+        captcha_cfg = {
+            "scene": scene,
+            "width": width,
+            "height": height,
+            "fps": fps,
+            "format": format,
+            "renderer": renderer,
+            "properties": properties
+        }
+        if captcha_cfg not in self.list_scenes:
+            self.list_scenes.append(captcha_cfg)
 
     async def start(self) -> bool:
         '''Launch the manager to start creating captchas.'''
@@ -183,15 +206,34 @@ class CaptchaAutoGenerator:
     async def _generate_captcha(self):
         """Generate a captcha."""
         loop = asyncio.get_running_loop()
-        result = await loop.run_in_executor(
-            None,
-            self._generator.generate,
-            None,  # code
-            None,  # scene
-            self.out_dir
-        )
+        # Generate a random one from the list of configured captchas
+        if len(self.list_scenes) > 0:
+            captcha_cfg = secrets.choice(self.list_scenes)
+            result = await loop.run_in_executor(
+                None,
+                self._generator.generate,
+                None,  # code
+                captcha_cfg["scene"],
+                self.out_dir,
+                None,  # tmp_dir
+                captcha_cfg["width"],
+                captcha_cfg["height"],
+                captcha_cfg["fps"],
+                captcha_cfg["format"],
+                captcha_cfg["renderer"],
+                captcha_cfg["properties"],
+            )
+        # If none captchas configured, generate one from builtin
+        else:
+            result = await loop.run_in_executor(
+                None,
+                self._generator.generate,
+                None,  # code
+                None,  # scene
+                self.out_dir
+            )
         if result.error:
-            logger.error("Captcha generation failed: %s", result.error_info)
+            logger.error("Captcha generation fail: %s", result.error_info)
         else:
             logger.debug("Generated captcha: %s", result.file)
 
