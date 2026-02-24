@@ -131,6 +131,7 @@ class CaptchaGenerator:
         # Set output captcha file (use current path if was not provided)
         if out_dir is None:
             out_dir = Path(".")
+        out_file_name = f"{code}.{format}"
         out_file = out_dir / f"{code}.{format}"
         # Use current path for temporary directory if was not provided
         if tmp_dir is None:
@@ -142,10 +143,10 @@ class CaptchaGenerator:
         # Create output directory if it doesn't exists
         out_dir.mkdir(parents=True, exist_ok=True)
         # Run Manim to generate the captcha
-        self._run_manim(code, scene, tmp_dir, width, height, fps, format,
-                        renderer, bg_color, properties)
-        generated_file = self._find_file(tmp_dir, format)
-        if generated_file:
+        self._run_manim(code, scene, tmp_dir, out_file_name, width, height,
+                        fps, format, renderer, bg_color, properties)
+        generated_file = tmp_dir / f"videos/{height}p{fps}/{out_file_name}"
+        if generated_file.exists():
             self._move_file(generated_file, out_file)
             captcha_result.code = code
             captcha_result.file = out_file
@@ -160,7 +161,7 @@ class CaptchaGenerator:
 
     ### Private Methods ###
 
-    def _run_manim(self, code: str, scene, media_dir: Path,
+    def _run_manim(self, code: str, scene, media_dir: Path, out_file: Path,
                    width: int, height: int, fps: int, format: str,
                    renderer: RendererType, bg_color: manim.ManimColor,
                    properties: dict | None):
@@ -172,6 +173,7 @@ class CaptchaGenerator:
             "frame_rate": fps,
             "background_color": bg_color,
             "media_dir": str(media_dir),
+            "output_file": out_file,
             "progress_bar": "none",
             "preview": False
         }
@@ -180,13 +182,6 @@ class CaptchaGenerator:
 
     def _generate_random_code(self, digits: int = 4) -> str:
         return "".join(secrets.choice("0123456789") for _ in range(digits))
-
-    def _find_file(self, directory, file_extension) -> Path | None:
-        gen_files = list(directory.rglob(f"*.{file_extension}"))
-        if not gen_files:
-            return None
-        # Last generated
-        return max(gen_files, key=lambda p: p.stat().st_mtime)
 
     def _rmdir(self, dir):
         try:
