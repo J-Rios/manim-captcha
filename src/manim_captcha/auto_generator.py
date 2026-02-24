@@ -152,13 +152,21 @@ class CaptchaAutoGenerator:
 
     async def stop(self):
         '''Stop the manager and the captcha creation.'''
-        self._running = False
         if self._task_create:
-            await self._task_create
+            self._task_create.cancel()
+            try:
+                await self._task_create
+            except asyncio.CancelledError:
+                pass
             self._task_create = None
         if self._task_remove:
-            await self._task_remove
+            self._task_remove.cancel()
+            try:
+                await self._task_remove
+            except asyncio.CancelledError:
+                pass
             self._task_remove = None
+        self._running = False
 
     def is_running(self) -> bool:
         '''Get Captcha Generator manager running status.'''
@@ -201,6 +209,8 @@ class CaptchaAutoGenerator:
             try:
                 async with self._lock:
                     await self._generate_captcha()
+            except asyncio.CancelledError:
+                raise
             except Exception:
                 logger.error(format_exc())
             await asyncio.sleep(self.interval_s)
@@ -250,6 +260,8 @@ class CaptchaAutoGenerator:
             try:
                 async with self._lock:
                     self._process_remove()
+            except asyncio.CancelledError:
+                raise
             except Exception:
                 logger.error(format_exc())
             await asyncio.sleep(self.interval_s)
