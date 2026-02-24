@@ -95,6 +95,7 @@ class CaptchaAutoGenerator:
         rotate mechanism will be replacing older captchas with newer
         ones).
         '''
+        self.list_captcha_files: list = list()
         self.list_scenes: list = list()
         self.out_dir = out_dir
         self.interval_s = interval_s
@@ -134,10 +135,16 @@ class CaptchaAutoGenerator:
 
     async def start(self) -> bool:
         '''Launch the manager to start creating captchas.'''
+        # Check if the generator can be started
         if not self.available:
             return False
         if self._running:
             return False
+        # Get list of captcha files already in the output directory
+        list_files = list(self.out_dir.glob(f"*.{self.format}"))
+        self.list_captcha_files = sorted(
+            list_files, key=lambda f: f.stat().st_mtime)
+        # Start Producer and Remover tasks
         self._running = True
         self._task_create = asyncio.create_task(self._producer_loop())
         self._task_remove = asyncio.create_task(self._remove_loop())
@@ -162,11 +169,7 @@ class CaptchaAutoGenerator:
         Get the number of generated captcha files availables in the
         file system.
         '''
-        try:
-            return sum(1 for _ in self.out_dir.glob(f"*.{self.format}"))
-        except Exception:
-            logger.exception("Fail to get number of captchas files available")
-            return 0
+        return len(self.list_captcha_files)
 
     def get_captcha(self) -> CaptchaData:
         '''Return a random captcha file from storage.'''
@@ -176,12 +179,11 @@ class CaptchaAutoGenerator:
             captcha_result.error_info = "Manim not found in the system"
             return captcha_result
         try:
-            files = list(self.out_dir.glob(f"*.{self.format}"))
-            if not files:
+            if not self.list_captcha_files:
                 captcha_result.error = True
                 captcha_result.error_info = "None captcha files generated"
                 return captcha_result
-            captcha_result.file = secrets.choice(files)
+            captcha_result.file = secrets.choice(self.list_captcha_files)
             captcha_result.code = captcha_result.file.stem
         except Exception:
             logger.error(format_exc())
@@ -236,6 +238,7 @@ class CaptchaAutoGenerator:
             logger.error("Captcha generation fail: %s", result.error_info)
         else:
             logger.debug("Generated captcha: %s", result.file)
+            self.list_captcha_files.append(result.file)
 
     ###########################################################################
 
@@ -254,13 +257,11 @@ class CaptchaAutoGenerator:
     def _process_remove(self):
         """Remove oldest file if limit exceeded."""
         # Dont remove if number of captchas is less than max_items limit
-        files = list(self.out_dir.glob(f"*.{self.format}"))
-        if len(files) < self.max_items:
+        if len(self.list_captcha_files) < self.max_items:
             return
         # Remove oldest captcha file
-        files.sort(key=lambda p: p.stat().st_mtime)
-        while len(files) > self.max_items:
-            oldest = files.pop(0)
+        while len(self.list_captcha_files) > self.max_items:
+            oldest = self.list_captcha_files.pop(0)
             try:
                 # Atomic rename (protect race condition from consumers)
                 # and delete the file
