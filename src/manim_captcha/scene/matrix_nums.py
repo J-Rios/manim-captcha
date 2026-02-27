@@ -150,13 +150,13 @@ class MatrixNums(manim.Scene):
                 run_time=0.6,
                 rate_func=manim.smooth
             )
-            self.wait(0.6)
-        # Move Selector to original position
-        self.play(
-            selector.animate.move_to(manim.ORIGIN),
-            run_time=0.6,
-            rate_func=manim.smooth
-        )
+            self.wait(0.2)
+            # Move Selector to original position
+            self.play(
+                selector.animate.move_to(manim.ORIGIN),
+                run_time=0.6,
+                rate_func=manim.smooth
+            )
         self.wait(1)
 
     def _add_noise(self, num_lines=20, num_dots=30, width=16, height=6):

@@ -93,7 +93,7 @@ class PiramidNums(manim.Scene):
         self.camera.background_color = self.bg_color
 
     def construct(self):
-        SELECTOR_ORIGIN = manim.ORIGIN + [-5.0, 2.0, 0]
+        SELECTOR_ORIGIN = manim.ORIGIN + [-2.5, 2.0, 0]
         SELECTOR_OPACITY = 0.5
         SELECTOR_RADIUS = 0.6
         NUMBERS_SIZE = 76
@@ -161,13 +161,13 @@ class PiramidNums(manim.Scene):
                 run_time=0.6,
                 rate_func=manim.smooth
             )
-            self.wait(0.6)
-        # Move Selector to original position
-        self.play(
-            selector.animate.move_to(SELECTOR_ORIGIN),
-            run_time=0.6,
-            rate_func=manim.smooth
-        )
+            self.wait(0.2)
+            # Move Selector to original position
+            self.play(
+                selector.animate.move_to(SELECTOR_ORIGIN),
+                run_time=0.6,
+                rate_func=manim.smooth
+            )
         self.wait(1)
 
     def _add_noise(self, num_lines=20, num_dots=30, width=8, height=6):
