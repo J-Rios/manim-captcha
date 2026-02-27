@@ -4,14 +4,13 @@
 
 from manim_captcha.generator import CaptchaGenerator
 from manim_captcha.scenes import CaptchaScene
-from manim_captcha.colors import CaptchaColorCustom
 from pathlib import Path
 
 THEME = {
-    "bg_color": CaptchaColorCustom("#84D5E9"),
-    "draw_color": CaptchaColorCustom("#FDA552"),
-    "selector_color": CaptchaColorCustom("#FDC189"),
-    "container_color": CaptchaColorCustom("#FBFCC0")
+    "bg_color": "#84D5E9",
+    "draw_color": "#FDA552",
+    "selector_color": "#FDC189",
+    "container_color": "#FBFCC0"
 }
 
 generator = CaptchaGenerator()

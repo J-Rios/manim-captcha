@@ -27,7 +27,6 @@ from traceback import format_exc
 from manim.constants import RendererType
 from manim_captcha.generator import CaptchaGenerator
 from manim_captcha.scenes import CaptchaScene
-from manim_captcha.colors import CaptchaColorCustom
 # from custom_captcha.test import TheScene as TestScene
 
 
@@ -178,10 +177,10 @@ def test_captcha_creation_builtin_themes():
 
 def test_captcha_creation_custom_theme():
     THEME = {
-        "bg_color": CaptchaColorCustom("#84D5E9"),
-        "draw_color": CaptchaColorCustom("#FDA552"),
-        "selector_color": CaptchaColorCustom("#FDC189"),
-        "container_color": CaptchaColorCustom("#FBFCC0")
+        "bg_color": "#84D5E9",
+        "draw_color": "#FDA552",
+        "selector_color": "#FDC189",
+        "container_color": "#FBFCC0"
     }
     OUT_DIR = BUILD_DIR / "theme_custom"
     rmdir(OUT_DIR)
