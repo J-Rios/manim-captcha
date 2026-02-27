@@ -67,7 +67,7 @@ def show_result(captcha):
 async def test_captcha_auto_generator():
     MAX_NUM_CAPTCHAS = 3
     TIME_GEN_INTERVAL_S = 10
-    TIME_CAPTCHA_GEN_S = 10
+    TIME_CAPTCHA_GEN_S = 12
     auto_generator = CaptchaAutoGenerator(
         BUILD_DIR, TIME_GEN_INTERVAL_S, MAX_NUM_CAPTCHAS)
     # Test get captcha returns error when no captchas are availables

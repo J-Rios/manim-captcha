@@ -64,7 +64,7 @@ async def main():
     # output directory (older captchas will be automatically removed
     # and renewed with new ones)
     MAX_NUM_CAPTCHAS = 5
-    TIME_GEN_INTERVAL_S = 10
+    TIME_GEN_INTERVAL_S = 12
     OUT_DIR = Path("./captchas")
     rmdir(OUT_DIR)
     auto_generator = CaptchaAutoGenerator(

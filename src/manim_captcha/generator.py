@@ -24,9 +24,12 @@ Version:
 # Standard Libraries
 ###############################################################################
 
+import json
 import logging
 import secrets
 import shutil
+import subprocess
+import sys
 
 from pathlib import Path
 from traceback import format_exc
@@ -66,7 +69,8 @@ class CaptchaGenerator:
 
     ### Constants ###
 
-    # None
+    MANIM_LAUNCHER = Path(__file__).parent / "manim_launcher.py"
+
 
     ###########################################################################
 
@@ -139,21 +143,26 @@ class CaptchaGenerator:
         # Set background color
         bg_color = CaptchaColor.BLACK
         if properties:
-            bg_color = properties.get("bg_color", manim.BLACK)
+            bg_color = properties.get("bg_color", CaptchaColor.BLACK)
         # Create output directory if it doesn't exists
         out_dir.mkdir(parents=True, exist_ok=True)
         # Run Manim to generate the captcha
-        self._run_manim(code, scene, tmp_dir, out_file_name, width, height,
-                        fps, format, renderer, bg_color, properties)
-        generated_file = tmp_dir / f"videos/{height}p{fps}/{out_file_name}"
-        if generated_file.exists():
-            self._move_file(generated_file, out_file)
-            captcha_result.code = code
-            captcha_result.file = out_file
-            logger.info("Generated captcha: %s", out_file)
-        else:
+        result = self._run_manim(code, scene, tmp_dir, out_file_name, width,
+                                  height, fps, format, renderer, bg_color,
+                                  properties)
+        if result.returncode != 0:
             captcha_result.error = True
-            captcha_result.error_info = "Captcha creation fail"
+            captcha_result.error_info = f"Manim process fail: {result.stderr}"
+        else:
+            generated_file = tmp_dir / f"videos/{height}p{fps}/{out_file_name}"
+            if generated_file.exists():
+                self._move_file(generated_file, out_file)
+                captcha_result.code = code
+                captcha_result.file = out_file
+                logger.info("Generated captcha: %s", out_file)
+            else:
+                captcha_result.error = True
+                captcha_result.error_info = "Captcha creation fail"
         self._rmdir(tmp_dir)
         return captcha_result
 
@@ -163,22 +172,32 @@ class CaptchaGenerator:
 
     def _run_manim(self, code: str, scene, media_dir: Path, out_file: Path,
                    width: int, height: int, fps: int, format: str,
-                   renderer: RendererType, bg_color: manim.ManimColor,
+                   renderer: RendererType, bg_color: str,
                    properties: dict | None):
-        config = {
-            "renderer": renderer,
+        manim_data = {
+            "scene_module": scene.__module__,
+            "scene_class": scene.__name__,
+            "code": code,
+            "properties": properties or {},
+            "renderer": renderer.name,
             "format": format,
             "pixel_width": width,
             "pixel_height": height,
             "frame_rate": fps,
             "background_color": bg_color,
             "media_dir": str(media_dir),
-            "output_file": out_file,
-            "progress_bar": "none",
-            "preview": False
+            "output_file": str(out_file),
         }
-        with manim._config.tempconfig(config):
-            scene(code, properties).render()
+        json_manim_data = json.dumps(manim_data)
+        # Run Manim subprocess
+        cmd = [sys.executable, str(self.MANIM_LAUNCHER), json_manim_data]
+        result = subprocess.run(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+        return result
 
     def _generate_random_code(self, digits: int = 4) -> str:
         return "".join(secrets.choice("0123456789") for _ in range(digits))
