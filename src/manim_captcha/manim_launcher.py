@@ -14,9 +14,7 @@ Description:
     Manim or ffmpg affects the generator process that uses it.
 Author:
     Jose Miguel Rios Rubio
-Creation date:
-    27/02/2026
-Last modified date:
+Date:
     27/02/2026
 Version:
     1.0.0

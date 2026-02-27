@@ -12,12 +12,10 @@ Description:
     custom scene or define from some builtin predefined scenes.
 Author:
     Jose Miguel Rios Rubio
-Creation date:
-    14/02/2026
-Last modified date:
+Date:
     14/02/2026
 Version:
-    1.0.0
+    1.2.0
 """
 
 ###############################################################################

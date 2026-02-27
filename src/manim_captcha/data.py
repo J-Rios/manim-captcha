@@ -8,9 +8,7 @@ Description:
     Manim Captcha Data (constants and data types).
 Author:
     Jose Miguel Rios Rubio
-Creation date:
-    16/02/2026
-Last modified date:
+Date:
     16/02/2026
 Version:
     1.0.0

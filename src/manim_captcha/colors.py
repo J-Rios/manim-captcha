@@ -8,12 +8,10 @@ Description:
     Manim captcha colors (wrapper to isolate and abstract Manim colors).
 Author:
     Jose Miguel Rios Rubio
-Creation date:
-    14/02/2026
-Last modified date:
-    14/02/2026
+Date:
+    27/02/2026
 Version:
-    1.0.0
+    1.1.0
 """
 
 ###############################################################################

@@ -15,12 +15,10 @@ Description:
     maximum number of captchas in the filesytem.
 Author:
     Jose Miguel Rios Rubio
-Creation date:
-    15/02/2026
-Last modified date:
-    16/02/2026
+Date:
+    27/02/2026
 Version:
-    1.0.0
+    1.2.0
 """
 
 ###############################################################################
