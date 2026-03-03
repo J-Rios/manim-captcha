@@ -24,6 +24,7 @@ Version:
 # Standard Libraries
 ###############################################################################
 
+import importlib.util
 import json
 import logging
 import sys
@@ -55,10 +56,13 @@ def main(argc, argv):
     json_data["renderer"] = manim.constants.RendererType[json_data["renderer"]]
     print(json_data)
     # Load Manim Scene
-    scene_module = json_data["scene_module"]
-    scene_class = json_data["scene_class"]
-    module = __import__(scene_module, fromlist=[scene_class])
-    SceneClass = getattr(module, scene_class)
+    scene_file = json_data["scene_file"]
+    class_name = json_data["scene_class"]
+    spec = importlib.util.spec_from_file_location("custom_scene", scene_file)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules["custom_scene"] = module
+    spec.loader.exec_module(module)
+    SceneClass = getattr(module, class_name)
     # Setup config renderer type
     manim_config = {
         "renderer": json_data["renderer"],

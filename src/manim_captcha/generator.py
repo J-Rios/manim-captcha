@@ -22,6 +22,7 @@ Version:
 # Standard Libraries
 ###############################################################################
 
+import inspect
 import json
 import logging
 import secrets
@@ -173,7 +174,7 @@ class CaptchaGenerator:
                    renderer: RendererType, bg_color: str,
                    properties: dict | None):
         manim_data = {
-            "scene_module": scene.__module__,
+            "scene_file": str(self._get_scene_file(scene)),
             "scene_class": scene.__name__,
             "code": code,
             "properties": properties or {},
@@ -214,6 +215,10 @@ class CaptchaGenerator:
             logger.error(format_exc())
             logger.error("Fail to move file to directory: %s -> %s",
                          file, target_dir)
+
+    def _get_scene_file(self, scene_class):
+        file_path = inspect.getfile(scene_class)
+        return Path(file_path).resolve()
 
     def _is_manim_available(self) -> bool:
         manim_bin = shutil.which("manim")
