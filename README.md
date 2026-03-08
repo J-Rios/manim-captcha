@@ -5,6 +5,9 @@
   <img src="https://github.com/user-attachments/assets/223b7e2d-99c4-410e-ab6e-4966ad47d2e8" alt="captcha_matrix" width="270" />
   <img src="https://github.com/user-attachments/assets/3c606acd-24bf-45bf-8a45-6127f392ea73" alt="captcha_piramid" width="270" />
 </div>
+<div style="display: flex;">
+<img src="https://github.com/user-attachments/assets/67b04e84-1278-4bbe-87e1-6b5c301396f5" alt="custom_captcha" width="270" />
+</div>
 
 ## Overview
 
@@ -16,7 +19,7 @@ This library offers:
 
 - A "Captcha Generator" that allows to request generation of captcha files.
 - A "Captcha Automatic Generator" for async operation that acts as a background process to automatically generate captcha files in the filesystem for a custom interval and keeping a maximum number of captchas files (file rotation).
-- Some builtin captchas animations that you can select to use.
+- Some builtin captcha animations that you can select to use.
 - Kind of "plugin" based system were you can provide any external custom Manim captcha animation script (scene) and make the library use it.
 - Easy way to pass custom properties to the captcha scenes for customization (like scenes).
 
@@ -133,6 +136,12 @@ if __name__ == '__main__':
 ```
 
 **Note:** You can find some extra usages in the *examples/* directory.
+
+## Use my own external custom captcha
+
+The library provides some builtin captchas, but the most useful feature is that it allows you to easily pass to the generator any external custom captcha scene that you have define.
+
+Take a look into [this example](examples/custom_captcha) to know how it works.
 
 ## Library Development
 
