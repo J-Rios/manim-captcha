@@ -7,10 +7,10 @@ name = "manim-captcha"
 version = "1.2.2"
 description = "Animated visual captcha generation library using Manim."
 authors = [
-    { name="Jose Miguel Rios Rubio" }
+    { name="Jose Miguel Rios Rubio", email = "jrios.github@gmail.com" }
 ]
 readme = "README.md"
-license = { text = "MIT" }
+license = { file = "LICENSE" }
 keywords = ["captcha", "manim", "animation", "video", "gif", "mp4"]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -21,6 +21,10 @@ requires-python = ">=3.9"
 dependencies = [
     "manim==0.19.2"
 ]
+
+[project.urls]
+Homepage = "https://github.com/J-Rios/manim-captcha"
+Issues = "https://github.com/J-Rios/manim-captcha/issues"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
