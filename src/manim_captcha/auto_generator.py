@@ -16,9 +16,9 @@ Description:
 Author:
     Jose Miguel Rios Rubio
 Date:
-    27/02/2026
+    11/03/2026
 Version:
-    1.2.0
+    1.2.2
 """
 
 ###############################################################################
@@ -279,6 +279,8 @@ class CaptchaAutoGenerator:
                 oldest.rename(deleting)
                 deleting.unlink(missing_ok=True)
                 logger.info("Removed old captcha: %s", oldest)
+            except FileNotFoundError:
+                pass
             except PermissionError:
                 logger.warning("File in use, skipping removal: %s", oldest)
             except Exception:
